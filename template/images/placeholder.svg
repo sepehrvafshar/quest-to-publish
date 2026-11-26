@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 450" width="600" height="450">
+  <rect width="600" height="450" fill="#fbead2"/>
+  <rect x="16" y="16" width="568" height="418" rx="20" fill="none" stroke="#8f3710" stroke-width="4" stroke-dasharray="14 10"/>
+  <g fill="none" stroke="#8f3710" stroke-width="8" stroke-linejoin="round" stroke-linecap="round">
+    <rect x="215" y="105" width="170" height="125" rx="10"/>
+    <path d="m228 215 50-55 35 35 25-25 35 45"/>
+    <circle cx="345" cy="138" r="12"/>
+  </g>
+  <g fill="#2b1d14" font-family="system-ui, sans-serif" text-anchor="middle">
+    <text x="300" y="295" font-size="38" font-weight="700">PLACEHOLDER</text>
+    <text x="300" y="345" font-size="28">Replace with your own image</text>
+    <text x="300" y="385" font-size="28">(public domain or with permission)</text>
+  </g>
+</svg>

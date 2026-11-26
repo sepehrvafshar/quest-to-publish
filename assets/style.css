@@ -1,0 +1,1565 @@
+/*
+  Quest to Publish: "the expedition atlas".
+  A field map for a research expedition: chart colors, ink outlines,
+  paper cards with solid shadows, stitched patches, and a trail to walk.
+*/
+
+/* ---------- Themes: night chart (default) and day map ---------- */
+
+:root {
+  color-scheme: dark;
+  --bg: #0c2530;
+  --bg-2: #0f2e3b;
+  --card: #143a49;
+  --sea: #0a1f29;
+  --land: #17434a;
+  --land-2: #1d5154;
+  --line: #356273;
+  --control-line: #87adb6;
+  --text: #f6eedb;
+  --muted: #bdd0d1;
+  --coral: #ff9670;
+  --sun: #ffd166;
+  --mint: #82e3b9;
+  --sky: #93d0f8;
+  --lilac: #cdbcff;
+  --rose: #ffa8ba;
+  --accent: var(--coral);
+  --button: #ff8f66;
+  --on-button: #10202a;
+  --focus: #ffe08a;
+  --shadow-ink: #04141b;
+  --contour: rgba(160, 208, 210, 0.1);
+  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+  --ease-rise: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-pop: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --gutter: clamp(1rem, 3.2vw, 5rem);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f4ead3;
+  --bg-2: #ecdfc2;
+  --card: #fffaf0;
+  --sea: #cfe3df;
+  --land: #f6e8bf;
+  --land-2: #e6dba6;
+  --line: #bfa876;
+  --control-line: #75623d;
+  --text: #1b2c34;
+  --muted: #465a61;
+  --coral: #a3361a;
+  --sun: #755000;
+  --mint: #0f6446;
+  --sky: #16567d;
+  --lilac: #563aa0;
+  --rose: #9a2147;
+  --focus: #0f46b0;
+  --shadow-ink: #1b2c34;
+  --contour: rgba(122, 96, 44, 0.14);
+}
+
+.w-coral { --accent: var(--coral); }
+.w-sun { --accent: var(--sun); }
+.w-mint { --accent: var(--mint); }
+.w-sky { --accent: var(--sky); }
+.w-lilac { --accent: var(--lilac); }
+.w-rose { --accent: var(--rose); }
+
+/* ---------- Base: everything grows with the screen ---------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* 16px on laptops and phones, growing gently to 24px on very large screens. */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  font-size: clamp(100%, 0.55rem + 0.5vw, 150%);
+  background: var(--bg);
+}
+
+html[data-text="large"] {
+  font-size: clamp(118.75%, 0.65rem + 0.6vw, 175%);
+}
+
+body {
+  margin: 0;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  overflow-wrap: break-word;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+html:not(.js) .needs-js {
+  display: none !important;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.12;
+}
+
+h1 {
+  margin: 0.4rem 0 0.6rem;
+  font-size: clamp(2.7rem, 1.4rem + 4.2vw, 5.5rem);
+}
+
+h2 {
+  margin: 0 0 0.6rem;
+  font-size: clamp(1.7rem, 1.2rem + 1.6vw, 2.75rem);
+}
+
+h3 {
+  margin: 0 0 0.35rem;
+  font-size: 1.4rem;
+}
+
+p {
+  max-width: 70ch;
+}
+
+a {
+  color: var(--coral);
+  text-underline-offset: 0.18em;
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
+main:focus {
+  outline: none;
+}
+
+/* Full width, with side margins that scale. */
+.wrap {
+  width: 100%;
+  padding-inline: var(--gutter);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.accent-text {
+  display: inline-block;
+  color: var(--coral);
+  text-decoration: underline wavy var(--sun) 0.09em;
+  text-underline-offset: 0.2em;
+}
+
+.skip-link {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 60;
+  padding: 0.6rem 1rem;
+  border: 2px solid #10202a;
+  border-radius: 0.5rem;
+  background: #ffd166;
+  color: #10202a;
+  font-weight: 700;
+  transform: translateY(-200%);
+}
+
+.skip-link:focus {
+  transform: none;
+}
+
+.sprite {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.ic {
+  flex: none;
+  width: 1.25em;
+  height: 1.25em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ---------- Atmosphere: contour lines and things drifting past ---------- */
+
+.sky {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.sky::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-radial-gradient(ellipse 120% 90% at 8% 12%, transparent 0 46px, var(--contour) 46px 48px),
+    repeating-radial-gradient(ellipse 100% 130% at 96% 88%, transparent 0 62px, var(--contour) 62px 64px);
+  -webkit-mask-image: radial-gradient(ellipse at 8% 12%, #000, transparent 38%), radial-gradient(ellipse at 96% 88%, #000, transparent 42%);
+  mask-image: radial-gradient(ellipse at 8% 12%, #000, transparent 38%), radial-gradient(ellipse at 96% 88%, #000, transparent 42%);
+}
+
+.shape {
+  position: absolute;
+  color: var(--muted);
+  opacity: 0.2;
+}
+
+html[data-calm="on"] .sky {
+  display: none;
+}
+
+/* ---------- Top bar and expedition pack ---------- */
+
+.site-header {
+  z-index: 40;
+  border-bottom: 2px solid var(--line);
+  background: var(--bg-2);
+}
+
+.bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 1.25rem;
+  padding-block: 0.55rem;
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.5rem;
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-style: italic;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.logo .ic {
+  width: 1.7rem;
+  height: 1.7rem;
+  color: var(--coral);
+}
+
+.nav-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.1rem;
+  margin: 0 auto 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nav-list a {
+  display: inline-block;
+  padding-block: 0.3rem;
+  border-bottom: 3px solid transparent;
+  color: var(--text);
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.nav-list a:hover {
+  border-bottom-color: var(--line);
+}
+
+.nav-list a[aria-current="page"] {
+  border-bottom-color: var(--coral);
+}
+
+.tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.hud {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  border: 2px solid var(--control-line);
+  border-radius: 0.6rem;
+  background: var(--card);
+  font-size: 0.9rem;
+  font-weight: 700;
+  list-style: none;
+}
+
+.hud li {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 2.35rem;
+  padding: 0 0.7rem;
+  white-space: nowrap;
+}
+
+.hud li + li {
+  border-left: 2px dashed var(--line);
+}
+
+.hud .ic {
+  color: var(--sun);
+}
+
+/* Progress shown as seven stages. */
+.xp {
+  display: inline-block;
+  width: 4.6rem;
+  height: 0.65rem;
+  overflow: hidden;
+  border: 1px solid var(--control-line);
+  border-radius: 2px;
+  -webkit-mask-image: repeating-linear-gradient(90deg, #000 0 calc(100% / 7 - 2px), transparent calc(100% / 7 - 2px) calc(100% / 7));
+  mask-image: repeating-linear-gradient(90deg, #000 0 calc(100% / 7 - 2px), transparent calc(100% / 7 - 2px) calc(100% / 7));
+}
+
+.xp i {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: var(--mint);
+}
+
+.icon-btn {
+  display: grid;
+  place-items: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  padding: 0;
+  border: 2px solid var(--control-line);
+  border-radius: 50%;
+  background: var(--card);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.icon-btn .ic {
+  width: 1.3rem;
+  height: 1.3rem;
+}
+
+.theme-btn .i-light,
+:root[data-theme="light"] .theme-btn .i-dark {
+  display: none;
+}
+
+:root[data-theme="light"] .theme-btn .i-light {
+  display: block;
+}
+
+/* The bar stays on screen only where there is room to spare. */
+@media (min-width: 52rem) and (min-height: 32rem) {
+  .site-header {
+    position: sticky;
+    top: 0;
+  }
+
+  html {
+    scroll-padding-top: 6rem;
+  }
+}
+
+/* Phones: one row of links, one row for the expedition pack. */
+@media (max-width: 30rem) {
+  .bar {
+    justify-content: center;
+    padding-inline: 0.5rem;
+  }
+
+  .logo {
+    display: none;
+  }
+
+  .nav-list {
+    justify-content: center;
+    gap: 0 0.7rem;
+    margin: 0;
+    font-size: 0.875rem;
+  }
+
+  .tools {
+    width: 100%;
+    justify-content: center;
+    gap: 0.35rem;
+  }
+
+  .hud li {
+    gap: 0.25rem;
+    padding: 0 0.45rem;
+  }
+
+  .xp {
+    width: 2.4rem;
+  }
+}
+
+/* ---------- Buttons: solid paper keys that press down ---------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 3rem;
+  padding: 0.6rem 1.3rem;
+  border: 2px solid var(--control-line);
+  border-radius: 0.6rem;
+  background: var(--card);
+  box-shadow: 4px 4px 0 var(--shadow-ink);
+  color: var(--text);
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 750;
+  line-height: 1.3;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn:hover {
+  border-color: var(--text);
+}
+
+.btn-primary {
+  border-color: #10202a;
+  background: var(--button);
+  color: var(--on-button);
+}
+
+.btn-primary:hover {
+  border-color: #10202a;
+  background: #ffab8b;
+  color: var(--on-button);
+}
+
+.btn[aria-disabled="true"] {
+  border: 2px dashed var(--mint);
+  background: var(--card);
+  box-shadow: none;
+  color: var(--text);
+  cursor: default;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+}
+
+/* ---------- Shared blocks ---------- */
+
+.kicker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 0.4rem;
+  color: var(--coral);
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.tag-pill {
+  padding: 0.1rem 0.6rem;
+  border: 2px solid #10202a;
+  border-radius: 0.3rem;
+  background: #ffd166;
+  color: #10202a;
+  transform: rotate(-3deg);
+}
+
+.section {
+  padding-block: clamp(2rem, 4vw, 4rem);
+}
+
+.panel {
+  position: relative;
+  padding: 1.25rem 1.35rem;
+  border: 2px solid var(--line);
+  border-radius: 0.8rem;
+  background: var(--card);
+  box-shadow: 6px 6px 0 var(--shadow-ink);
+}
+
+.site-footer {
+  margin-top: 2rem;
+  padding-block: 1.75rem 2.5rem;
+  border-top: 2px solid var(--line);
+  background: var(--bg-2);
+  color: var(--muted);
+}
+
+.site-footer p {
+  margin: 0.25rem 0;
+}
+
+/* ---------- Hero and the atlas ---------- */
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(1.5rem, 3vw, 4rem);
+  align-items: center;
+  padding-block: clamp(1.25rem, 3vw, 3rem);
+}
+
+.hero > * {
+  min-width: 0;
+}
+
+.hero h1 {
+  font-size: clamp(2.7rem, 1.2rem + 2.65vw, 6.5rem);
+}
+
+.hero .kicker {
+  margin-bottom: 0.2rem;
+}
+
+.subtitle {
+  max-width: 34ch;
+  margin: 0 0 1rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 1rem + 0.9vw, 1.9rem);
+  font-style: italic;
+  line-height: 1.35;
+}
+
+.lede {
+  max-width: 58ch;
+  color: var(--muted);
+}
+
+.facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1rem 0 1.25rem;
+  padding: 0;
+  list-style: none;
+}
+
+.facts li {
+  padding: 0.15rem 0.75rem;
+  border: 2px dashed var(--line);
+  border-radius: 0.4rem;
+  font-size: 0.9rem;
+  font-weight: 650;
+}
+
+.small-note {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+/* Mid-size screens: the introduction splits in two so the width is used. */
+@media (min-width: 52rem) and (max-width: 77.99rem) {
+  .hero-intro {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2rem;
+    align-items: center;
+  }
+}
+
+@media (min-width: 78rem) {
+  .hero {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  }
+}
+
+/* The guide and its field note. */
+.guide {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.75rem;
+  max-width: 40rem;
+  margin-top: 1rem;
+}
+
+.bot {
+  display: block;
+  flex: none;
+  width: clamp(4.5rem, 8vw, 7.5rem);
+  height: auto;
+}
+
+.bubble {
+  position: relative;
+  flex: 1;
+  min-height: 5rem;
+  margin: 0 0 0.5rem;
+  padding: 0.7rem 1rem;
+  border: 2px solid #10202a;
+  border-radius: 0.8rem;
+  background: #fffaf0;
+  box-shadow: 4px 4px 0 var(--shadow-ink);
+  color: #152730;
+  line-height: 1.5;
+}
+
+.bubble::before {
+  content: "";
+  position: absolute;
+  bottom: 1.1rem;
+  left: -0.55rem;
+  width: 0.9rem;
+  height: 0.9rem;
+  border-bottom: 2px solid #10202a;
+  border-left: 2px solid #10202a;
+  background: inherit;
+  transform: rotate(45deg);
+}
+
+.bubble strong {
+  display: block;
+  font-family: var(--font-display);
+  font-style: italic;
+}
+
+.caret {
+  display: inline-block;
+  width: 0.5ch;
+  height: 1.05em;
+  margin-left: 1px;
+  background: currentColor;
+  vertical-align: text-bottom;
+}
+
+.atlas-frame {
+  container-type: inline-size;
+}
+
+.atlas {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border: 3px solid var(--line);
+  border-radius: 1.2rem;
+  background: var(--sea);
+  box-shadow: 10px 10px 0 var(--shadow-ink);
+}
+
+.atlas-art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.land { fill: var(--land); stroke: var(--line); stroke-width: 5; }
+.hill { fill: var(--land-2); }
+.ring { fill: none; stroke: var(--contour); stroke-width: 4; }
+.ink { fill: none; stroke: var(--control-line); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; opacity: 0.55; }
+.rose-fill { fill: var(--control-line); opacity: 0.6; }
+
+.seg {
+  fill: none;
+  stroke: var(--text);
+  stroke-width: 7;
+  stroke-linecap: round;
+  stroke-dasharray: 2 20;
+  opacity: 0.75;
+}
+
+.seg.walked {
+  stroke: var(--sun);
+  stroke-width: 11;
+  stroke-dasharray: none;
+  opacity: 1;
+}
+
+.nodes {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.node {
+  position: absolute;
+  top: var(--y);
+  left: var(--x);
+  width: 0;
+  height: 0;
+}
+
+.node a {
+  position: absolute;
+  top: calc(-1 * clamp(1.4rem, 3.6cqw, 3.2rem));
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  width: max-content;
+  max-width: 24cqw;
+  color: var(--text);
+  text-align: center;
+  text-decoration: none;
+  transform: translateX(-50%);
+}
+
+.node a:focus-visible {
+  outline: none;
+}
+
+.node a:focus-visible .node-dot {
+  outline: 4px solid var(--focus);
+  outline-offset: 4px;
+}
+
+.node-dot {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: clamp(2.8rem, 7.2cqw, 6.4rem);
+  height: clamp(2.8rem, 7.2cqw, 6.4rem);
+  border: 3px solid var(--accent);
+  border-radius: 50%;
+  background: var(--card);
+  box-shadow: 0 5px 0 var(--shadow-ink);
+  color: var(--accent);
+}
+
+.node-dot .ic {
+  width: 52%;
+  height: 52%;
+}
+
+.node-num {
+  position: absolute;
+  top: -0.35rem;
+  left: -0.35rem;
+  display: grid;
+  place-items: center;
+  min-width: 1.5rem;
+  height: 1.5rem;
+  border: 2px solid #10202a;
+  border-radius: 50%;
+  background: #ffd166;
+  color: #10202a;
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.node-label {
+  padding: 0.1rem 0.55rem;
+  border: 2px solid var(--line);
+  border-radius: 0.45rem;
+  background: var(--card);
+  font-size: clamp(0.72rem, 1.55cqw, 1.2rem);
+  font-weight: 750;
+  line-height: 1.3;
+}
+
+.node-label small {
+  display: block;
+  color: var(--muted);
+  font-size: 0.85em;
+  font-weight: 600;
+}
+
+.node.is-done .node-dot {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+.token {
+  position: absolute;
+  top: var(--y, 79%);
+  left: var(--x, 10.6%);
+  width: clamp(2.6rem, 7.5cqw, 7rem);
+  pointer-events: none;
+  transform: translate(-50%, -143%);
+}
+
+.token img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.atlas-caption {
+  margin: 1rem 0 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+/* On narrow screens the map folds into a trail list. */
+@container (max-width: 38rem) {
+  .atlas {
+    aspect-ratio: auto;
+    padding: 0.9rem 0.75rem;
+  }
+
+  .atlas-art,
+  .token {
+    display: none;
+  }
+
+  .nodes {
+    position: static;
+  }
+
+  .node {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: auto;
+    height: auto;
+    padding-bottom: 0.9rem;
+  }
+
+  .node:not(:last-child)::before {
+    content: "";
+    position: absolute;
+    top: 3.2rem;
+    bottom: 0;
+    left: calc(1.55rem - 2px);
+    border-left: 4px dotted var(--text);
+  }
+
+  .node.is-done:not(:last-child)::before {
+    border-left: 4px solid var(--sun);
+  }
+
+  .node:last-child {
+    padding-bottom: 0;
+  }
+
+  .node a {
+    position: static;
+    flex-direction: row;
+    gap: 0.75rem;
+    width: auto;
+    max-width: none;
+    text-align: left;
+    transform: none;
+  }
+
+  .node-dot {
+    flex: none;
+    width: 3.1rem;
+    height: 3.1rem;
+  }
+
+  .node-label {
+    flex: 1;
+    font-size: 0.95rem;
+  }
+}
+
+/* ---------- Field notes: one card for each quest ---------- */
+
+/* One, two, or four columns, so the eight cards always make full rows. */
+.notes {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(1rem, 1.6vw, 2rem);
+  margin: 1.5rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 44rem) {
+  .notes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 78rem) {
+  .notes {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.note {
+  display: flex;
+}
+
+.ic.big {
+  width: 2.75rem;
+  height: 2.75rem;
+  color: var(--accent);
+}
+
+.note-card {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding-top: 1.6rem;
+  border-top: 0.5rem solid var(--accent);
+}
+
+/* A strip of tape holds each note down. */
+.note-card::before {
+  content: "";
+  position: absolute;
+  top: -1rem;
+  left: 50%;
+  width: 5.5rem;
+  height: 1.1rem;
+  background: color-mix(in srgb, var(--accent) 45%, transparent);
+  transform: translateX(-50%) rotate(-2.5deg);
+}
+
+.note .kicker {
+  padding-right: 6.5rem;
+  color: var(--accent);
+}
+
+.time {
+  padding: 0 0.5rem;
+  border: 2px solid var(--line);
+  border-radius: 0.3rem;
+  color: var(--text);
+}
+
+.note h4 {
+  margin: 0.8rem 0 0.25rem;
+  font-size: 1rem;
+}
+
+.note ul {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
+.goal {
+  margin: 0;
+}
+
+.badge-row {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin-top: auto;
+  padding-top: 1rem;
+}
+
+.badge-row p {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  line-height: 1.35;
+}
+
+.badge-label {
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.badge-name {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.note-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.stamp {
+  display: none;
+  align-items: center;
+  gap: 0.25rem;
+  position: absolute;
+  top: 0.9rem;
+  right: 0.8rem;
+  padding: 0.1rem 0.5rem;
+  border: 3px double var(--mint);
+  border-radius: 0.35rem;
+  color: var(--mint);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transform: rotate(7deg);
+}
+
+.is-done .stamp {
+  display: inline-flex;
+}
+
+/* ---------- Stitched patches ---------- */
+
+.patch {
+  flex: none;
+  width: 4.5rem;
+  height: 4.5rem;
+  overflow: visible;
+  color: var(--muted);
+}
+
+.patch-base {
+  fill: var(--bg-2);
+  stroke: var(--control-line);
+  stroke-width: 3;
+}
+
+.patch-stitch {
+  fill: none;
+  stroke: var(--control-line);
+  stroke-width: 1.5;
+  stroke-dasharray: 3 3;
+}
+
+.patch use {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.is-unlocked .patch {
+  color: var(--accent);
+}
+
+.is-unlocked .patch-base {
+  fill: color-mix(in srgb, var(--accent) 24%, var(--card));
+  stroke: var(--accent);
+}
+
+.is-unlocked .patch-stitch {
+  stroke: var(--accent);
+}
+
+/* ---------- Rules, patch board, certificate ---------- */
+
+.how-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  gap: clamp(1rem, 1.6vw, 2rem);
+  margin: 1.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.how-grid .ic {
+  width: 2.4rem;
+  height: 2.4rem;
+  margin-bottom: 0.5rem;
+  color: var(--accent);
+}
+
+.how-grid p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.shelf {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 8.5rem), 1fr));
+  gap: 1rem;
+  margin: 1.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.shelf li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 1.1rem 0.5rem;
+  text-align: center;
+  line-height: 1.3;
+}
+
+.shelf .patch {
+  width: 5.5rem;
+  height: 5.5rem;
+}
+
+.shelf .badge-name {
+  font-size: 1.05rem;
+}
+
+.shelf .badge-state {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.shelf .is-unlocked {
+  border-color: var(--accent);
+}
+
+.thanks {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: center;
+  padding: clamp(1.5rem, 3vw, 3rem);
+  outline: 2px dashed var(--line);
+  outline-offset: -0.75rem;
+}
+
+.thanks p {
+  margin-bottom: 1.25rem;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(7.5rem, 1fr));
+  gap: 1rem;
+  margin: 0;
+}
+
+.stats div {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  max-width: 11rem;
+  width: 100%;
+  margin-inline: auto;
+  border: 3px double var(--sun);
+  border-radius: 50%;
+  background: var(--bg-2);
+}
+
+.stats dt {
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.stats dd {
+  margin: 0;
+  color: var(--sun);
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+@media (min-width: 62rem) {
+  .thanks {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+  }
+}
+
+/* ---------- Field slips, coin pop, paper scraps ---------- */
+
+.toast-area {
+  position: fixed;
+  z-index: 50;
+  right: 0.75rem;
+  bottom: 0.75rem;
+  left: 0.75rem;
+  display: flex;
+  justify-content: flex-end;
+  pointer-events: none;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  max-width: 28rem;
+  padding: 0.75rem 1.1rem;
+  border: 2px solid #10202a;
+  border-left: 0.6rem solid #ff8f66;
+  border-radius: 0.5rem;
+  background: #fffaf0;
+  box-shadow: 6px 6px 0 var(--shadow-ink);
+  color: #152730;
+  line-height: 1.4;
+}
+
+.toast .ic {
+  width: 2rem;
+  height: 2rem;
+}
+
+.toast strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+}
+
+.coin-pop {
+  position: fixed;
+  z-index: 55;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.2rem 0.7rem;
+  border: 2px solid #10202a;
+  border-radius: 999px;
+  background: #ffd166;
+  color: #10202a;
+  font-weight: 800;
+  pointer-events: none;
+}
+
+.confetti {
+  position: fixed;
+  z-index: 54;
+  width: 0.6rem;
+  height: 0.75rem;
+  clip-path: polygon(0 0, 100% 15%, 80% 100%, 10% 80%);
+  pointer-events: none;
+}
+
+/* ---------- Dialogs: settings and the opening screen ---------- */
+
+dialog {
+  width: min(100% - 2rem, 28rem);
+  max-height: calc(100% - 2rem);
+  padding: 1.5rem;
+  overflow: auto;
+  border: 3px solid var(--line);
+  border-radius: 1rem;
+  background: var(--card);
+  box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.45);
+  color: var(--text);
+}
+
+dialog::backdrop {
+  background: rgba(3, 14, 19, 0.78);
+}
+
+.settings h2 {
+  font-size: 1.5rem;
+}
+
+.switch {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+  padding: 0.6rem 0.75rem;
+  border: 2px dashed var(--line);
+  border-radius: 0.6rem;
+  cursor: pointer;
+}
+
+.switch input {
+  flex: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin: 0.2rem 0 0;
+  accent-color: #e2663c;
+}
+
+.switch small {
+  display: block;
+  color: var(--muted);
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.boot {
+  text-align: center;
+}
+
+.boot::backdrop {
+  background:
+    repeating-radial-gradient(ellipse 90% 70% at 50% 50%, transparent 0 54px, rgba(160, 208, 210, 0.12) 54px 56px),
+    #0a1f29;
+}
+
+.boot p {
+  margin-inline: auto;
+}
+
+.compass {
+  display: block;
+  width: 8rem;
+  height: 8rem;
+  margin: 0 auto;
+}
+
+.compass .dial { fill: var(--bg-2); stroke: var(--control-line); stroke-width: 4; }
+.compass .ticks { fill: none; stroke: var(--control-line); stroke-width: 3; stroke-linecap: round; }
+.compass .north { fill: #ff8f66; }
+.compass .south { fill: var(--text); }
+.compass .needle { transform-origin: 60px 60px; transform: rotate(28deg); }
+
+.boot-title {
+  margin: 0.75rem 0 0;
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-style: italic;
+  font-weight: 700;
+}
+
+.boot .kicker {
+  justify-content: center;
+}
+
+.boot-bar {
+  height: 0.8rem;
+  overflow: hidden;
+  border: 2px solid var(--control-line);
+  border-radius: 999px;
+}
+
+.boot-bar i {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(90deg, #ffd166 0 10px, #ff8f66 10px 20px);
+  transform-origin: left;
+}
+
+.boot-line {
+  display: flex;
+  justify-content: space-between;
+  margin: 0.5rem 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+.boot-tip {
+  min-height: 3.3em;
+  margin: 0.5rem 0 1rem;
+  color: var(--muted);
+}
+
+/* ---------- Motion ---------- */
+
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(28px) rotate(-1.5deg); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes bot-bob {
+  50% { transform: translateY(-6px) rotate(-2deg); }
+}
+
+@keyframes drift {
+  from { transform: translate(0, 0) rotate(-4deg); }
+  to { transform: translate(var(--dx, 14px), var(--dy, -12px)) rotate(6deg); }
+}
+
+@keyframes march {
+  to { stroke-dashoffset: -44; }
+}
+
+@keyframes beacon {
+  50% { box-shadow: 0 5px 0 var(--shadow-ink), 0 0 0 10px color-mix(in srgb, var(--accent) 30%, transparent); }
+}
+
+@keyframes needle {
+  0% { transform: rotate(-150deg); }
+  45% { transform: rotate(70deg); }
+  70% { transform: rotate(5deg); }
+  100% { transform: rotate(28deg); }
+}
+
+@keyframes caret {
+  50% { opacity: 0; }
+}
+
+@keyframes bump {
+  40% { transform: scale(1.25) rotate(-6deg); }
+}
+
+@keyframes stamp {
+  0% { opacity: 0; transform: scale(2.4) rotate(-12deg); }
+  100% { opacity: 1; transform: scale(1) rotate(7deg); }
+}
+
+@keyframes patch-sew {
+  0% { transform: scale(0.3) rotate(-160deg); }
+  100% { transform: none; }
+}
+
+@keyframes coin-pop {
+  0% { opacity: 0; transform: translateY(8px) scale(0.8); }
+  20% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-52px) scale(1.15); }
+}
+
+@keyframes confetti-burst {
+  0% { opacity: 1; transform: translate(0, 0) rotate(0); }
+  60% { opacity: 1; }
+  100% { opacity: 0; transform: translate(var(--x), var(--y)) rotate(var(--r)); }
+}
+
+@keyframes slip-in {
+  from { opacity: 0; transform: translateX(40px) rotate(4deg); }
+}
+
+/* Everything below moves, so it only applies when motion is welcome. */
+html[data-motion="full"] {
+  scroll-behavior: smooth;
+}
+
+html[data-motion="full"] .shape {
+  animation: drift var(--t, 5s) ease-in-out var(--delay, 0s) infinite alternate;
+}
+
+html[data-motion="full"] .bot-bob {
+  animation: bot-bob 3.4s ease-in-out infinite;
+}
+
+html[data-motion="full"] .seg:not(.walked) {
+  animation: march 2.4s linear infinite;
+}
+
+html[data-motion="full"] .node.is-current .node-dot {
+  animation: beacon 2.2s ease-in-out infinite;
+}
+
+html[data-motion="full"] .token {
+  transition: top 1s var(--ease-pop), left 1s var(--ease-rise);
+}
+
+html[data-motion="full"] .boot[open] .needle {
+  animation: needle 4.6s var(--ease-rise) both;
+}
+
+html[data-motion="full"] .caret {
+  animation: caret 0.9s step-end infinite;
+}
+
+html[data-motion="full"] .rise {
+  opacity: 0;
+}
+
+html[data-motion="full"] .rise.in {
+  animation: rise-in 0.65s var(--ease-rise) calc(var(--i, 0) * 0.08s) both;
+  opacity: 1;
+}
+
+html[data-motion="full"] .bump {
+  animation: bump 0.45s var(--ease-pop);
+}
+
+html[data-motion="full"] .just-unlocked .patch {
+  animation: patch-sew 0.8s var(--ease-pop);
+}
+
+html[data-motion="full"] .just-cleared .stamp {
+  animation: stamp 0.45s var(--ease-pop) both;
+}
+
+html[data-motion="full"] .coin-pop {
+  animation: coin-pop 1.1s var(--ease-rise) forwards;
+}
+
+html[data-motion="full"] .confetti {
+  animation: confetti-burst 1.2s var(--ease-rise) forwards;
+}
+
+html[data-motion="full"] .toast {
+  animation: slip-in 0.45s var(--ease-pop);
+}
+
+html[data-motion="full"] .btn,
+html[data-motion="full"] .icon-btn {
+  transition: translate 0.2s var(--ease-pop), box-shadow 0.2s var(--ease-pop), rotate 0.2s var(--ease-pop);
+}
+
+html[data-motion="full"] .btn:not([aria-disabled="true"]):hover,
+html[data-motion="full"] .btn:not([aria-disabled="true"]):focus-visible {
+  translate: -2px -2px;
+  box-shadow: 7px 7px 0 var(--shadow-ink);
+}
+
+html[data-motion="full"] .btn:not([aria-disabled="true"]):active {
+  translate: 3px 3px;
+  box-shadow: 1px 1px 0 var(--shadow-ink);
+}
+
+html[data-motion="full"] .icon-btn:hover {
+  rotate: 14deg;
+}
+
+html[data-motion="full"] .node-dot,
+html[data-motion="full"] .how-grid .panel,
+html[data-motion="full"] .note-card,
+html[data-motion="full"] .shelf li {
+  transition: translate 0.25s var(--ease-pop), rotate 0.25s var(--ease-pop), border-color 0.2s;
+}
+
+html[data-motion="full"] .node a:hover .node-dot,
+html[data-motion="full"] .node a:focus-visible .node-dot {
+  translate: 0 -8px;
+}
+
+html[data-motion="full"] .how-grid .panel:hover,
+html[data-motion="full"] .shelf li:hover {
+  translate: 0 -5px;
+  rotate: -1.5deg;
+}
+
+html[data-motion="full"] .note:hover .note-card,
+html[data-motion="full"] .note:focus-within .note-card {
+  translate: 0 -6px;
+}
+
+.note:hover .note-card,
+.note:focus-within .note-card,
+.how-grid .panel:hover {
+  border-color: var(--accent);
+}
+
+html[data-motion="full"] .xp i,
+html[data-motion="full"] .meter i {
+  transition: width 0.6s var(--ease-rise);
+}
+
+/* Keep shapes visible when the operating system forces its own colors. */
+@media (forced-colors: active) {
+  .node-dot,
+  .node-num {
+    border: 3px solid CanvasText;
+  }
+
+  .xp i,
+  .boot-bar i {
+    background: Highlight;
+  }
+}

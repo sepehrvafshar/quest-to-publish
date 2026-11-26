@@ -1,0 +1,401 @@
+/* Styles used only by the bug hunt page. */
+
+.hunt {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(1.25rem, 2vw, 2.5rem);
+  padding-block: clamp(1rem, 2vw, 2rem);
+}
+
+.hunt > * {
+  min-width: 0;
+}
+
+.hunt-side {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.intro h1 {
+  font-size: clamp(2.5rem, 1.6rem + 2vw, 4rem);
+}
+
+.zap-key {
+  display: inline-grid;
+  place-items: center;
+  width: 1.7rem;
+  height: 1.7rem;
+  border: 2px solid var(--control-line);
+  border-radius: 50%;
+  vertical-align: middle;
+}
+
+.hints {
+  max-width: 70ch;
+  padding: 0.75rem 1rem;
+  border: 2px dashed var(--line);
+  border-radius: 0.6rem;
+  background: var(--card);
+}
+
+.hints summary {
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.hints ul {
+  padding-left: 1.2rem;
+}
+
+/* ---------- Tracker ---------- */
+
+.tracker {
+  border-top: 0.5rem solid var(--accent);
+}
+
+.tracker h2 {
+  margin-bottom: 0.25rem;
+  font-size: 1.5rem;
+}
+
+.counter {
+  margin: 0 0 0.5rem;
+  font-weight: 700;
+}
+
+.counter span {
+  color: var(--accent);
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+}
+
+.meter {
+  height: 0.8rem;
+  overflow: hidden;
+  border: 2px solid var(--control-line);
+  border-radius: 999px;
+}
+
+.meter i {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: repeating-linear-gradient(90deg, #ffd166 0 10px, #ff8f66 10px 20px);
+}
+
+.tracker ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 14rem), 1fr));
+  gap: 0.4rem 1rem;
+  margin: 0.9rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tracker li {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--muted);
+}
+
+.tracker li .ic {
+  width: 1.4rem;
+  height: 1.4rem;
+  border: 2px solid var(--control-line);
+  border-radius: 50%;
+  /* The check mark stays hidden until the bug is found. */
+  stroke: transparent;
+}
+
+.tracker li.found {
+  color: var(--text);
+  font-weight: 700;
+}
+
+.tracker li.found .ic {
+  border-color: var(--mint);
+  stroke: var(--mint);
+}
+
+/* ---------- The practice page: a plain light "website" pinned to the map ---------- */
+
+.practice {
+  --focus: #1546b8;
+  color-scheme: light;
+  align-self: start;
+  overflow: hidden;
+  border: 4px dashed #ff8f66;
+  border-radius: 0.8rem;
+  background: #ffffff;
+  box-shadow: 10px 10px 0 var(--shadow-ink);
+  color: #2b1d14;
+}
+
+:root[data-theme="light"] .practice {
+  border-color: #a3361a;
+}
+
+.practice-label {
+  max-width: none;
+  margin: 0;
+  padding: 0.75rem 1.25rem;
+  background: #ffd98a;
+  color: #2b1d14;
+}
+
+.practice-label strong {
+  display: inline-block;
+  margin-right: 0.5rem;
+  padding: 0.1rem 0.7rem;
+  border-radius: 0.3rem;
+  background: #2b1d14;
+  color: #ffffff;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* Wider screens get more columns of the museum page. */
+.museum {
+  columns: 23rem;
+  column-gap: 2rem;
+  padding: 1rem clamp(0.6rem, 1.5vw, 2rem) 1.5rem;
+}
+
+.lead {
+  column-span: all;
+  margin-bottom: 0.75rem;
+}
+
+.room {
+  margin-bottom: 1rem;
+  break-inside: avoid;
+}
+
+.museum a {
+  color: #8a3d0f;
+}
+
+.museum h2,
+.museum h3,
+.museum h5 {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.museum h2 {
+  font-size: clamp(1.4rem, 1rem + 1.2vw, 2.2rem);
+}
+
+.museum h3 {
+  font-size: 1.3rem;
+}
+
+.museum h5 {
+  font-size: 1.12rem;
+}
+
+.museum p,
+.museum figure,
+.museum dl {
+  margin: 0;
+}
+
+.museum img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+}
+
+.museum figcaption {
+  margin-top: 0.4rem;
+  color: #55433a;
+  font-size: 0.95rem;
+}
+
+.museum #fact-sheet {
+  margin-top: 0.5rem;
+  padding-block: 0.9rem;
+  padding-left: 1rem;
+  background: #fbead2;
+}
+
+.museum dl div {
+  margin-top: 0.5rem;
+}
+
+.museum dt {
+  font-weight: 700;
+}
+
+.museum dd {
+  margin: 0;
+}
+
+.visitor-note {
+  color: #bfb5aa;
+}
+
+.references {
+  margin: 0;
+  padding-left: 1.6rem;
+}
+
+.museum sup a {
+  display: inline-block;
+  min-width: 1.5rem;
+  text-align: center;
+}
+
+/* ---------- Zap targets ---------- */
+
+.spot {
+  position: relative;
+  margin-bottom: 0.35rem;
+  padding: 0.4rem 3rem 0.4rem 0.6rem;
+  border: 2px solid transparent;
+  border-radius: 0.5rem;
+  break-inside: avoid;
+  scroll-margin-block: 2rem;
+  cursor: crosshair;
+}
+
+.spot:hover,
+.spot:focus-within {
+  border-color: #b4571a;
+  border-style: dashed;
+}
+
+.zap-btn {
+  position: absolute;
+  top: 0.35rem;
+  right: 0.35rem;
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  border: 2px solid #8a6f58;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #55433a;
+  cursor: crosshair;
+}
+
+.zap-btn:hover,
+.zap-btn:focus-visible {
+  border-color: #2b1d14;
+  background: #ffd98a;
+  color: #2b1d14;
+}
+
+.spot.zapped,
+.spot.zapped:hover {
+  border: 3px solid #1d7a45;
+  box-shadow: 0 0 0 4px rgba(29, 122, 69, 0.18);
+}
+
+.zapped .zap-btn {
+  border-color: #1d7a45;
+  background: #1d7a45;
+  color: #ffffff;
+}
+
+.zap-tag {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  width: max-content;
+  max-width: 100%;
+  margin-top: 0.4rem;
+  padding: 0.1rem 0.7rem;
+  border-radius: 0.3rem;
+  background: #1d7a45;
+  color: #ffffff;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 700;
+  transform: rotate(-1.5deg);
+}
+
+/* ---------- Answers ---------- */
+
+.answers {
+  padding-block: 0.75rem;
+}
+
+.answers h2 {
+  margin-top: 1.5rem;
+}
+
+.answer-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+  gap: 1.25rem;
+  padding: 0;
+  list-style: none;
+}
+
+.answer-list p {
+  margin: 0.4rem 0 0;
+}
+
+/* Side by side: briefing and tracker on the left, the practice page filling the rest. */
+@media (min-width: 64rem) {
+  .hunt {
+    grid-template-columns: minmax(19rem, 1fr) minmax(0, 2.6fr);
+  }
+
+  .answers {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Keep the counter in view while reading, when the screen is tall enough. */
+@media (min-width: 64rem) and (min-height: 40rem) {
+  .tracker {
+    position: sticky;
+    top: 5.5rem;
+  }
+}
+
+@keyframes zap-shake {
+  15% { transform: translate(-6px, -3px) rotate(-1.2deg) scale(1.03); }
+  32% { transform: translate(6px, 2px) rotate(1deg) scale(1.02); }
+  50% { transform: translate(-4px, -1px) rotate(-0.7deg); }
+  70% { transform: translate(3px, 0) rotate(0.4deg); }
+}
+
+@keyframes zap-glow {
+  30% { box-shadow: 0 0 0 6px rgba(255, 143, 102, 0.6), 0 0 36px rgba(255, 143, 102, 0.9); }
+}
+
+@keyframes miss-nudge {
+  30% { transform: translateX(-5px); }
+  65% { transform: translateX(4px); }
+}
+
+html[data-motion="full"] .spot.hit {
+  animation: zap-shake 0.55s ease-in-out, zap-glow 0.8s ease-out;
+}
+
+html[data-motion="full"] .spot.miss {
+  animation: miss-nudge 0.35s ease-in-out;
+}
+
+@media (forced-colors: active) {
+  .meter i {
+    background: Highlight;
+  }
+
+  .tracker li.found .ic {
+    stroke: Highlight;
+  }
+
+  .spot.zapped {
+    border-color: Highlight;
+  }
+}

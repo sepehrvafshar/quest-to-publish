@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Bug Hunt: Practice Page | Quest to Publish</title>
+  <meta name="description" content="A teaching game: zap six planted errors on a made-up, AI-style project page about a historic house museum.">
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="bug-hunt.css">
+  <script src="../assets/prefs.js"></script>
+  <script src="../assets/game.js" defer></script>
+  <script src="bug-hunt.js" defer></script>
+</head>
+<body>
+  <dialog id="boot" class="boot" aria-labelledby="boot-title">
+    <svg class="compass" viewBox="0 0 120 120" aria-hidden="true" focusable="false">
+      <circle class="dial" cx="60" cy="60" r="54"/>
+      <path class="ticks" d="M60 12v10M60 98v10M12 60h10M98 60h10M26 26l5 5M89 89l5 5M94 26l-5 5M31 89l-5 5"/>
+      <g class="needle"><path class="north" d="M60 22 71 60H49Z"/><path class="south" d="M60 98 49 60h22Z"/></g>
+      <circle class="dial" cx="60" cy="60" r="5"/>
+    </svg>
+    <p class="boot-title" id="boot-title">Quest to Publish</p>
+    <p class="kicker">Learn · Build · Publish</p>
+    <div class="boot-bar" aria-hidden="true"><i id="boot-fill"></i></div>
+    <p class="boot-line"><span id="boot-status">LOADING QUEST 0</span><span id="boot-pct" aria-hidden="true">100%</span></p>
+    <p class="boot-tip" id="boot-tip">Tip: old cheat codes still work here.</p>
+    <button type="button" class="btn" id="boot-skip">Skip</button>
+  </dialog>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <!-- Icon set: rounded line icons drawn for this site. -->
+  <svg xmlns="http://www.w3.org/2000/svg" class="sprite" aria-hidden="true" focusable="false">
+    <symbol id="i-map" viewBox="0 0 24 24"><path d="m9 4 6 2.5 5-2v13L15 20l-6-2.5-5 2v-13Z"/><path d="M9 4v13.5M15 6.5V20"/></symbol>
+    <symbol id="i-scroll" viewBox="0 0 24 24"><path d="M6 16V6a2 2 0 0 1 2-2h9a3 3 0 0 1 3 3v1h-4"/><path d="M16 6v12a2 2 0 0 1-2 2H6a2.5 2.5 0 0 1-2.5-2.5V16H12v1.5A2.5 2.5 0 0 0 14 20"/><path d="M9.5 8.5H13M9.5 12H13"/></symbol>
+    <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5 21V4"/><path d="M5 5c5-3 8 3 14 0v9c-6 3-9-3-14 0"/></symbol>
+    <symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4.5"/><path d="m11.5 11.5 8-8M16 7l3 3M13.5 9.5l2 2"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v5c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6Z"/><path d="m8.5 12 2.5 2.5 4.5-5"/></symbol>
+    <symbol id="i-bug" viewBox="0 0 24 24"><rect x="8" y="8" width="8" height="12" rx="4"/><path d="M12 12v8M8 13H4M16 13h4M8 17l-3.5 2.5M16 17l3.5 2.5M8.5 10 5 7M15.5 10 19 7M10 8.3 8.5 4M14 8.3 15.5 4"/></symbol>
+    <symbol id="i-rocket" viewBox="0 0 24 24"><path d="M12 3c4 2.5 5.5 7 4.5 11L15 17H9l-1.5-3c-1-4 .5-8.5 4.5-11Z"/><circle cx="12" cy="10" r="2"/><path d="m7.5 13-3 3v3.5L9 17M16.5 13l3 3v3.5L15 17M12 19.5V22"/></symbol>
+    <symbol id="i-trophy" viewBox="0 0 24 24"><path d="M7 4h10v5a5 5 0 0 1-10 0Z"/><path d="M7 6H4v1a4 4 0 0 0 3.5 4M17 6h3v1a4 4 0 0 1-3.5 4M12 14v4M8 21h8M9.5 21v-3h5v3"/></symbol>
+    <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3.5 2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.3-4.1 5.9-.9Z"/></symbol>
+    <symbol id="i-coin" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m12 7.5 1.35 2.75 3 .45-2.2 2.1.55 3-2.7-1.4-2.7 1.4.55-3-2.2-2.1 3-.45Z"/></symbol>
+    <symbol id="i-badge" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14 7 21l5-2.5 5 2.5-1.5-7"/><path d="m9.5 9 1.7 1.7 3.3-3.4"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M19 5l-1.5 1.5M6.5 17.5 5 19"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"/></symbol>
+    <symbol id="i-access" viewBox="0 0 24 24"><circle cx="12" cy="4.5" r="1.75"/><path d="M4 8.5c5 1.5 11 1.5 16 0M12 10v5M12 15l-3.5 6M12 15l3.5 6"/></symbol>
+    <symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5Z"/></symbol>
+    <symbol id="i-tent" viewBox="0 0 24 24"><path d="M12 6 3 20h18Z"/><path d="m8.5 20 3.5-7 3.5 7M12 6V3l3.5 1.5L12 6"/></symbol>
+    <symbol id="i-blocks" viewBox="0 0 24 24"><rect x="3.5" y="13" width="8" height="8" rx="1.5"/><rect x="12.500" y="13" width="8" height="8" rx="1.5"/><rect x="8" y="4" width="8" height="8" rx="1.5"/></symbol>
+    <symbol id="i-beacon" viewBox="0 0 24 24"><path d="m9 21 1-10h4l1 10M7 21h10"/><rect x="9.5" y="6" width="5" height="5" rx="1"/><path d="M12 6V3.500M6.500 7.500 3 6.500M6.500 10 3 11.500M17.500 7.500l3.500-1M17.500 10l3.500 1.5"/></symbol>
+    <symbol id="i-door" viewBox="0 0 24 24"><path d="M4 21h2.5M17 21h3M6.500 21V4H17v17"/><path d="m6.500 4 7 2.500V22l-7-1"/><path d="M11 13.500h.01"/></symbol>
+    <symbol id="i-zap" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="1.5"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M7 18.5a4.5 4.5 0 0 1-.5-9 6 6 0 0 1 11.4 1.2 3.9 3.9 0 0 1-.9 7.8Z"/></symbol>
+    <symbol id="i-plane" viewBox="0 0 24 24"><path d="M21.5 3.5 2.5 11l7 2.5 2.5 7Z"/><path d="m9.5 13.5 12-10"/></symbol>
+    <symbol id="i-sparkle" viewBox="0 0 24 24"><path d="M12 3c1 5 4 8 9 9-5 1-8 4-9 9-1-5-4-8-9-9 5-1 8-4 9-9Z"/></symbol>
+  </svg>
+  <div class="sky" aria-hidden="true"></div>
+
+  <header class="site-header">
+      <div class="wrap bar">
+        <a class="logo" href="../"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-compass"/></svg> <span class="logo-text">Quest to Publish</span></a>
+        <nav aria-label="Main">
+          <ul class="nav-list">
+            <li><a href="../#map">Map</a></li>
+            <li><a href="../#quest-path">Field notes</a></li>
+            <li><a href="../#badges">Badges</a></li>
+            <li><a href="./" aria-current="page">Bug Hunt</a></li>
+            <li><a href="../template/">Template</a></li>
+          </ul>
+        </nav>
+        <div class="tools needs-js">
+          <ul class="hud" aria-label="Your progress">
+            <li><span class="sr-only">Level</span><span aria-hidden="true">Lv</span> <span data-stat="level">1</span> <span class="xp" aria-hidden="true"><i data-xp></i></span></li>
+            <li id="hud-coins"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-coin"/></svg> <span data-stat="coins">0</span><span class="sr-only">coins</span></li>
+            <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-badge"/></svg> <span data-stat="badges">0/6</span><span class="sr-only">badges collected</span></li>
+          </ul>
+          <button type="button" class="icon-btn theme-btn" id="theme-btn" aria-label="Light theme" aria-pressed="false"><svg class="ic i-dark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg><svg class="ic i-light" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg></button>
+          <button type="button" class="icon-btn" id="settings-btn" aria-label="Accessibility and settings" aria-haspopup="dialog"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-access"/></svg></button>
+        </div>
+      </div>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <div class="wrap hunt">
+      <div class="hunt-side">
+        <div class="intro">
+          <p class="kicker"><span class="tag-pill">Quest 4</span> 20 minutes</p>
+          <h1>AI Bug <span class="accent-text">Hunt</span></h1>
+          <p>The practice page was written to look like an AI assistant produced it. It hides <strong>exactly 6 errors</strong>. Some are in the facts, and some affect how people can use the page.</p>
+          <p>Spot something suspicious? Zap it: click the item, or Tab to its round <span class="zap-key"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-zap"/></svg><span class="sr-only">target</span></span> button and press Enter. There is no timer and no penalty for a miss.</p>
+          <details class="hints">
+            <summary>Need a hint? Ways to check a page</summary>
+            <ul>
+              <li>Compare every claim with the archive fact sheet.</li>
+              <li>Look up each source in a library catalog or a scholarly search engine.</li>
+              <li>Follow every link, then use the Back button to return.</li>
+              <li>Some problems hide in the code. Right-click an item and choose Inspect, or run a free checker such as the WAVE or axe browser extension.</li>
+              <li>Squint, dim your screen, or read the page outdoors. Is every word still easy to read?</li>
+            </ul>
+          </details>
+          <div class="guide">
+            <img class="bot bot-bob" src="../assets/quest-bot.svg" alt="" width="160" height="180">
+            <p class="bubble"><strong>Quest Bot</strong> <span aria-hidden="true"><span id="bot-typed">Six bugs are hiding in this page. Trust nothing until you have checked it!</span><span class="caret needs-js"></span></span><span class="sr-only" id="bot-spoken">Six bugs are hiding in this page. Trust nothing until you have checked it!</span></p>
+          </div>
+        </div>
+
+        <noscript><p class="panel">Turn on JavaScript to zap bugs and reveal the answers.</p></noscript>
+
+        <section class="tracker panel w-rose needs-js" aria-labelledby="tracker-title">
+          <h2 id="tracker-title">Bug tracker</h2>
+          <p class="counter">Bugs found <span id="bug-count">0/6</span></p>
+          <div class="meter" aria-hidden="true"><i id="meter-fill"></i></div>
+          <ul>
+              <li data-bug="date"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-check"/></svg> <span>Wrong date</span> <span class="sr-only" data-bug-state>not found yet</span></li>
+              <li data-bug="citation"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-check"/></svg> <span>Invented citation</span> <span class="sr-only" data-bug-state>not found yet</span></li>
+              <li data-bug="link"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-check"/></svg> <span>Broken link</span> <span class="sr-only" data-bug-state>not found yet</span></li>
+              <li data-bug="alt"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-check"/></svg> <span>Image without alt text</span> <span class="sr-only" data-bug-state>not found yet</span></li>
+              <li data-bug="contrast"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-check"/></svg> <span>Low-contrast text</span> <span class="sr-only" data-bug-state>not found yet</span></li>
+              <li data-bug="heading"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-check"/></svg> <span>Skipped heading level</span> <span class="sr-only" data-bug-state>not found yet</span></li>
+          </ul>
+        </section>
+      </div>
+
+      <!-- Start of the practice section. -->
+      <section class="practice" aria-labelledby="practice-label">
+        <p class="practice-label" id="practice-label"><strong>Practice page</strong> A made-up example for teaching. The museum and its people do not exist.</p>
+        <article class="museum">
+            <div class="lead">
+            <div class="spot" data-spot="a"><h2>Quillfeather House Museum: A Window into Everyday Life</h2></div>
+            <div class="spot" data-spot="b"><p>Nestled in the heart of Merrow Bend, the Quillfeather House Museum invites visitors to step into a bygone era. This digital project brings together rooms, objects, and stories to illuminate domestic life in a small river town.</p></div>
+
+            </div>
+            <div class="room">
+            <div class="spot" data-spot="c">
+              <figure>
+                <img src="house.svg" width="640" height="360">
+                <figcaption>Figure 1. The museum today.</figcaption>
+              </figure>
+            </div>
+
+            <div class="spot" data-spot="d" id="fact-sheet">
+              <h3>Archive fact sheet</h3>
+              <p>Checked by the curator against museum records. Use it to test the rest of the page.</p>
+              <dl>
+                <div><dt>House completed</dt><dd>1884</dd></div>
+                <div><dt>Last family resident</dt><dd>Beatrix Quillfeather, who lived here until her death in 1958</dd></div>
+                <div><dt>Opened to the public as a museum</dt><dd>1962</dd></div>
+              </dl>
+            </div>
+
+            </div>
+            <div class="room">
+            <div class="spot" data-spot="e"><h3>The House and Its Family</h3></div>
+            <div class="spot" data-spot="f"><p>Completed in 1884, the house sheltered three generations of the Quillfeather family. Beatrix Quillfeather, a seed merchant's daughter and a devoted diarist, lived here until her death in 1958.<sup><a href="#ref-1" aria-label="Reference 1">[1]</a></sup> Her notebooks record recipes, the weather, and the price of coal.</p></div>
+
+            </div>
+            <div class="room">
+            <div class="spot" data-spot="g"><h3>From Home to Museum</h3></div>
+            <div class="spot" data-spot="h"><p>Local volunteers cataloged the furnishings room by room. The museum first opened its doors in 1926, and it has since welcomed students, researchers, and curious neighbors.</p></div>
+
+            </div>
+            <div class="room">
+            <div class="spot" data-spot="i"><h3>Explore the Collection</h3></div>
+            <div class="spot" data-spot="j"><p>The collection invites visitors to connect ordinary objects with the people who used them, from a parlor piano to a well-worn bread board.</p></div>
+            <div class="spot" data-spot="k"><h5>The Kitchen Notebooks</h5></div>
+            <div class="spot" data-spot="l"><p>Researchers have described the notebooks as a remarkably rich record of household routines across several decades.<sup><a href="#ref-2" aria-label="Reference 2">[2]</a></sup></p></div>
+
+            </div>
+            <div class="room">
+            <div class="spot" data-spot="m"><h3>Plan Your Visit</h3></div>
+            <div class="spot" data-spot="n"><p>See the <a href="visiting-hours.html">current visiting hours and tour times</a> before you travel.</p></div>
+            <div class="spot" data-spot="o"><p class="visitor-note">Photography without flash is welcome. The upstairs rooms are reached by a narrow staircase, so ask at the front desk about the ground-floor photo tour.</p></div>
+
+            </div>
+            <div class="room">
+            <div class="spot" data-spot="p"><h3>References</h3></div>
+            <ol class="references">
+              <li class="spot" data-spot="q" id="ref-1"><span>Quillfeather House Museum. <a href="#fact-sheet">Archive fact sheet</a>, reproduced on this page.</span></li>
+              <li class="spot" data-spot="r" id="ref-2"><span>Pemberton, R. L., &amp; Vasquez-Lindqvist, T. (2017). Parlors of memory: Diaries and domestic space in small house museums. <cite>Journal of Hearth and Heritage Studies, 14</cite>(2), 88-104.</span></li>
+            </ol>
+            </div>
+        </article>
+      </section>
+      <!-- End of the practice section. -->
+
+      <section class="answers needs-js" aria-label="Answers">
+        <p>Finished hunting, or ready to compare notes?</p>
+        <div class="actions">
+          <button type="button" class="btn btn-primary" id="reveal-button" aria-expanded="false" aria-controls="answer-panel"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-eye"/></svg> <span data-label>Reveal answers</span></button>
+          <a class="btn" href="../#step-5">Next stop: Access for All <svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a>
+          <button type="button" class="btn" data-reset>Reset progress</button>
+        </div>
+        <div id="answer-panel" hidden></div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>Workshop by Sepehr Vaez Afshar, University of Illinois Urbana-Champaign</p>
+      <p><a href="https://sepafshar.com/">sepafshar.com</a></p>
+    </div>
+  </footer>
+
+  <dialog id="settings" class="settings" aria-labelledby="settings-title">
+    <h2 id="settings-title">Accessibility and settings</h2>
+    <label class="switch"><input type="checkbox" data-pref="reduce"> <span>Reduce motion<small id="reduce-note">Stops drifting shapes, bobbing, marching trails, confetti, and the loading animation.</small></span></label>
+    <label class="switch"><input type="checkbox" data-pref="large"> <span>Larger text<small>Makes all text a size bigger.</small></span></label>
+    <label class="switch"><input type="checkbox" data-pref="calm"> <span>Calm background<small>Hides the contour lines and drifting shapes.</small></span></label>
+    <label class="switch"><input type="checkbox" data-pref="sound"> <span>Sound effects<small>Short beeps for coins and badges. Off by default.</small></span></label>
+    <div class="actions">
+      <form method="dialog"><button class="btn btn-primary">Done</button></form>
+      <button type="button" class="btn" data-reset>Reset progress</button>
+    </div>
+    <p id="settings-note" role="status"></p>
+  </dialog>
+
+  <div class="sr-only" id="announcer" role="status"></div>
+  <div class="toast-area" id="toast-area" aria-hidden="true"></div>
+</body>
+</html>

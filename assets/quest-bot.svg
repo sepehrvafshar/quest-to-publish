@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 180" width="160" height="180">
+  <!-- Quest Bot: an original lantern-shaped field guide with one big lens. -->
+  <ellipse cx="80" cy="171" rx="46" ry="6" fill="#000000" opacity="0.25"/>
+  <g stroke="#10202a" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">
+    <!-- Pennant antenna -->
+    <path d="M80 36V8" fill="none"/>
+    <path d="M82 9h34l-9 10 9 10H82Z" fill="#82e3b9"/>
+    <!-- Backpack -->
+    <rect x="16" y="76" width="30" height="58" rx="12" fill="#2f7f86"/>
+    <!-- Legs and boots -->
+    <path d="M62 142v18M98 142v18" fill="none" stroke-width="8"/>
+    <path d="M46 168q2-14 24-10v10ZM90 168v-10q22-4 24 10Z" fill="#6b4a34"/>
+    <!-- Lantern body -->
+    <path d="M52 36h56l8 14H44Z" fill="#ffd166"/>
+    <rect x="34" y="50" width="92" height="94" rx="24" fill="#ff8f66"/>
+    <!-- Lens eye -->
+    <circle cx="80" cy="86" r="29" fill="#fffaf0"/>
+    <circle cx="84" cy="88" r="14" fill="#10202a" stroke="none"/>
+    <circle cx="89" cy="82" r="5" fill="#fffaf0" stroke="none"/>
+    <!-- Smile and dials -->
+    <path d="M66 125q14 11 28 0" fill="none"/>
+    <!-- Arms: one waves, one holds a rolled map -->
+    <path d="M126 96q18-4 18-26" fill="none" stroke-width="8"/>
+    <circle cx="144" cy="66" r="8" fill="#ffd166"/>
+    <path d="M36 112q-14 8-12 22" fill="none" stroke-width="8"/>
+    <path d="m6 146 32-22 9 13-32 22Z" fill="#f6e6bb"/>
+  </g>
+  <circle cx="52" cy="124" r="4" fill="#ffd166"/>
+  <circle cx="108" cy="124" r="4" fill="#ffd166"/>
+</svg>

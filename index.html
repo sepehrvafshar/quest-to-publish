@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quest to Publish: An AI-Assisted Digital Humanities Workshop</title>
+  <meta name="description" content="A proposed 3-hour, game-based workshop where participants with no coding experience publish a small website for their own research project.">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/style.css">
+  <script src="assets/prefs.js"></script>
+  <script src="assets/game.js" defer></script>
+  <script src="assets/home.js" defer></script>
+</head>
+<body>
+  <dialog id="boot" class="boot" aria-labelledby="boot-title">
+    <svg class="compass" viewBox="0 0 120 120" aria-hidden="true" focusable="false">
+      <circle class="dial" cx="60" cy="60" r="54"/>
+      <path class="ticks" d="M60 12v10M60 98v10M12 60h10M98 60h10M26 26l5 5M89 89l5 5M94 26l-5 5M31 89l-5 5"/>
+      <g class="needle"><path class="north" d="M60 22 71 60H49Z"/><path class="south" d="M60 98 49 60h22Z"/></g>
+      <circle class="dial" cx="60" cy="60" r="5"/>
+    </svg>
+    <p class="boot-title" id="boot-title">Quest to Publish</p>
+    <p class="kicker">Learn · Build · Publish</p>
+    <div class="boot-bar" aria-hidden="true"><i id="boot-fill"></i></div>
+    <p class="boot-line"><span id="boot-status">LOADING QUEST 0</span><span id="boot-pct" aria-hidden="true">100%</span></p>
+    <p class="boot-tip" id="boot-tip">Tip: old cheat codes still work here.</p>
+    <button type="button" class="btn" id="boot-skip">Skip</button>
+  </dialog>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <!-- Icon set: rounded line icons drawn for this site. -->
+  <svg xmlns="http://www.w3.org/2000/svg" class="sprite" aria-hidden="true" focusable="false">
+    <symbol id="i-map" viewBox="0 0 24 24"><path d="m9 4 6 2.5 5-2v13L15 20l-6-2.5-5 2v-13Z"/><path d="M9 4v13.5M15 6.5V20"/></symbol>
+    <symbol id="i-scroll" viewBox="0 0 24 24"><path d="M6 16V6a2 2 0 0 1 2-2h9a3 3 0 0 1 3 3v1h-4"/><path d="M16 6v12a2 2 0 0 1-2 2H6a2.5 2.5 0 0 1-2.5-2.5V16H12v1.5A2.5 2.5 0 0 0 14 20"/><path d="M9.5 8.5H13M9.5 12H13"/></symbol>
+    <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5 21V4"/><path d="M5 5c5-3 8 3 14 0v9c-6 3-9-3-14 0"/></symbol>
+    <symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4.5"/><path d="m11.5 11.5 8-8M16 7l3 3M13.5 9.5l2 2"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v5c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6Z"/><path d="m8.5 12 2.5 2.5 4.5-5"/></symbol>
+    <symbol id="i-bug" viewBox="0 0 24 24"><rect x="8" y="8" width="8" height="12" rx="4"/><path d="M12 12v8M8 13H4M16 13h4M8 17l-3.5 2.5M16 17l3.5 2.5M8.5 10 5 7M15.5 10 19 7M10 8.3 8.5 4M14 8.3 15.5 4"/></symbol>
+    <symbol id="i-rocket" viewBox="0 0 24 24"><path d="M12 3c4 2.5 5.5 7 4.5 11L15 17H9l-1.5-3c-1-4 .5-8.5 4.5-11Z"/><circle cx="12" cy="10" r="2"/><path d="m7.5 13-3 3v3.5L9 17M16.5 13l3 3v3.5L15 17M12 19.5V22"/></symbol>
+    <symbol id="i-trophy" viewBox="0 0 24 24"><path d="M7 4h10v5a5 5 0 0 1-10 0Z"/><path d="M7 6H4v1a4 4 0 0 0 3.5 4M17 6h3v1a4 4 0 0 1-3.5 4M12 14v4M8 21h8M9.5 21v-3h5v3"/></symbol>
+    <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3.5 2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.3-4.1 5.9-.9Z"/></symbol>
+    <symbol id="i-coin" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m12 7.5 1.35 2.75 3 .45-2.2 2.1.55 3-2.7-1.4-2.7 1.4.55-3-2.2-2.1 3-.45Z"/></symbol>
+    <symbol id="i-badge" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14 7 21l5-2.5 5 2.5-1.5-7"/><path d="m9.5 9 1.7 1.7 3.3-3.4"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M19 5l-1.5 1.5M6.5 17.5 5 19"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"/></symbol>
+    <symbol id="i-access" viewBox="0 0 24 24"><circle cx="12" cy="4.5" r="1.75"/><path d="M4 8.5c5 1.5 11 1.5 16 0M12 10v5M12 15l-3.5 6M12 15l3.5 6"/></symbol>
+    <symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5Z"/></symbol>
+    <symbol id="i-tent" viewBox="0 0 24 24"><path d="M12 6 3 20h18Z"/><path d="m8.5 20 3.5-7 3.5 7M12 6V3l3.5 1.5L12 6"/></symbol>
+    <symbol id="i-blocks" viewBox="0 0 24 24"><rect x="3.5" y="13" width="8" height="8" rx="1.5"/><rect x="12.500" y="13" width="8" height="8" rx="1.5"/><rect x="8" y="4" width="8" height="8" rx="1.5"/></symbol>
+    <symbol id="i-beacon" viewBox="0 0 24 24"><path d="m9 21 1-10h4l1 10M7 21h10"/><rect x="9.5" y="6" width="5" height="5" rx="1"/><path d="M12 6V3.500M6.500 7.500 3 6.500M6.500 10 3 11.500M17.500 7.500l3.500-1M17.500 10l3.500 1.5"/></symbol>
+    <symbol id="i-door" viewBox="0 0 24 24"><path d="M4 21h2.5M17 21h3M6.500 21V4H17v17"/><path d="m6.500 4 7 2.500V22l-7-1"/><path d="M11 13.500h.01"/></symbol>
+    <symbol id="i-zap" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="1.5"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M7 18.5a4.5 4.5 0 0 1-.5-9 6 6 0 0 1 11.4 1.2 3.9 3.9 0 0 1-.9 7.8Z"/></symbol>
+    <symbol id="i-plane" viewBox="0 0 24 24"><path d="M21.5 3.5 2.5 11l7 2.5 2.5 7Z"/><path d="m9.5 13.5 12-10"/></symbol>
+    <symbol id="i-sparkle" viewBox="0 0 24 24"><path d="M12 3c1 5 4 8 9 9-5 1-8 4-9 9-1-5-4-8-9-9 5-1 8-4 9-9Z"/></symbol>
+  </svg>
+  <div class="sky" aria-hidden="true"></div>
+
+  <header class="site-header">
+      <div class="wrap bar">
+        <a class="logo" href="./"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-compass"/></svg> <span class="logo-text">Quest to Publish</span></a>
+        <nav aria-label="Main">
+          <ul class="nav-list">
+            <li><a href="#map">Map</a></li>
+            <li><a href="#quest-path">Field notes</a></li>
+            <li><a href="#badges">Badges</a></li>
+            <li><a href="bug-hunt/">Bug Hunt</a></li>
+            <li><a href="template/">Template</a></li>
+          </ul>
+        </nav>
+        <div class="tools needs-js">
+          <ul class="hud" aria-label="Your progress">
+            <li><span class="sr-only">Level</span><span aria-hidden="true">Lv</span> <span data-stat="level">1</span> <span class="xp" aria-hidden="true"><i data-xp></i></span></li>
+            <li id="hud-coins"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-coin"/></svg> <span data-stat="coins">0</span><span class="sr-only">coins</span></li>
+            <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-badge"/></svg> <span data-stat="badges">0/6</span><span class="sr-only">badges collected</span></li>
+          </ul>
+          <button type="button" class="icon-btn theme-btn" id="theme-btn" aria-label="Light theme" aria-pressed="false"><svg class="ic i-dark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg><svg class="ic i-light" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg></button>
+          <button type="button" class="icon-btn" id="settings-btn" aria-label="Accessibility and settings" aria-haspopup="dialog"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-access"/></svg></button>
+        </div>
+      </div>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <div class="wrap hero">
+      <section class="hero-intro" aria-labelledby="page-title">
+        <div>
+        <p class="kicker"><span class="tag-pill">Start here</span> Workshop proposal · AI4DH Summer School 2027, University of Ljubljana</p>
+        <h1 id="page-title">Quest to <span class="accent-text">Publish</span></h1>
+        <p class="subtitle">A Playful, AI-Assisted Workshop on Building and Sharing Digital Humanities Projects</p>
+        </div>
+        <div>
+        <p class="lede">In three hours, participants with no coding experience use the free version of Claude or ChatGPT, together with GitHub and GitHub Pages, to publish a small website about their own research. The workshop is organized as a series of quests: teams earn collaborative badges, hunt for mistakes in AI-written content, and take on an accessibility challenge before sharing what they built.</p>
+        <ul class="facts">
+          <li>3 hours</li>
+          <li>No coding experience needed</li>
+          <li>Free tools</li>
+          <li>Team badges, no leaderboard</li>
+        </ul>
+        <div class="actions">
+          <a class="btn btn-primary" href="bug-hunt/"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-bug"/></svg> Try the AI Bug Hunt</a>
+          <a class="btn" href="template/"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-rocket"/></svg> Use the starter template</a>
+        </div>
+        <p class="small-note">New to GitHub? Read the <a href="https://github.com/sepehrvafshar/quest-to-publish/tree/main/template#readme">step-by-step template guide</a>.</p>
+        </div>
+      </section>
+
+      <section class="atlas-frame" id="map" aria-labelledby="map-title">
+        <h2 class="sr-only" id="map-title">Expedition map</h2>
+        <div class="atlas">
+            <svg class="atlas-art" viewBox="0 0 1600 1000" aria-hidden="true" focusable="false">
+              <path class="land" d="M70 800C40 700 120 640 170 590C120 500 140 330 250 270C350 215 450 270 470 360C490 440 450 500 540 560C620 620 590 740 480 780C390 815 380 900 260 910C160 918 90 880 70 800Z"/>
+              <path class="land" d="M540 230C540 130 660 90 760 130C860 170 860 270 920 330C1010 390 1050 500 980 590C900 680 760 640 760 540C760 450 800 400 720 360C640 330 545 330 540 230Z"/>
+              <path class="land" d="M1040 700C1060 610 1180 620 1240 560C1300 500 1230 400 1260 300C1290 190 1420 150 1500 230C1580 310 1560 430 1500 500C1440 580 1500 700 1400 800C1300 890 1040 850 1040 700Z"/>
+              <path class="hill" d="M200 480q45-75 90 0ZM255 495q35-55 70 0ZM900 440q35-55 70 0ZM1330 560q45-70 90 0ZM1385 575q30-48 60 0ZM300 840q35-52 70 0Z"/>
+              <g class="ring">
+                <ellipse cx="1390" cy="320" rx="92" ry="70"/><ellipse cx="1390" cy="320" rx="132" ry="104"/>
+                <ellipse cx="300" cy="360" rx="100" ry="70"/><ellipse cx="660" cy="230" rx="86" ry="64"/>
+              </g>
+              <path class="ink" d="M120 560l16-34 16 34ZM136 560v12M160 590l16-34 16 34ZM176 590v12M95 610l16-34 16 34ZM111 610v12M520 700l16-34 16 34ZM536 700v12M555 725l16-34 16 34ZM571 725v12M800 200l16-34 16 34ZM816 200v12M1330 760l16-34 16 34ZM1346 760v12M1370 735l16-34 16 34ZM1386 735v12M1470 380l16-34 16 34ZM1486 380v12M380 300l16-34 16 34ZM396 300v12"/>
+              <path class="ink" d="M120 130q16-13 32 0t32 0M210 170q16-13 32 0t32 0M1000 150q16-13 32 0t32 0M1090 190q16-13 32 0t32 0M690 800q16-13 32 0t32 0M780 850q16-13 32 0t32 0M610 930q16-13 32 0t32 0M950 300q16-13 32 0t32 0M40 460q16-13 32 0t32 0M1520 650q16-13 32 0t32 0"/>
+              <g>
+                <circle class="ink" cx="1480" cy="880" r="62"/>
+                <path class="rose-fill" d="m1480 795 17 68 68 17-68 17-17 68-17-68-68-17 68-17Z"/>
+              </g>
+              <path class="seg" data-seg="q0" d="M170 790C250 820 330 720 430 650"/>
+              <path class="seg" data-seg="q1" d="M430 650C560 560 220 480 300 360"/>
+              <path class="seg" data-seg="q2" d="M300 360C370 250 520 180 660 230"/>
+              <path class="seg" data-seg="q3" d="M660 230C820 290 730 450 870 520"/>
+              <path class="seg" data-seg="q4" d="M870 520C990 580 990 740 1150 730"/>
+              <path class="seg" data-seg="q5" d="M1150 730C1370 720 1220 440 1390 320"/>
+            </svg>
+          <ol class="nodes">
+              <li class="node w-coral" data-quest="q0" style="--x:10.625%;--y:79%">
+                <a href="#step-0">
+                  <span class="node-dot"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-compass"/></svg><span class="node-num" aria-hidden="true">0</span></span>
+                  <span class="node-label"><span class="sr-only">Quest 0: </span>Briefing <small>20 min</small><span class="sr-only" data-node-state></span></span>
+                </a>
+              </li>
+              <li class="node w-sun" data-quest="q1" style="--x:26.875%;--y:65%">
+                <a href="#step-1">
+                  <span class="node-dot"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-tent"/></svg><span class="node-num" aria-hidden="true">1</span></span>
+                  <span class="node-label"><span class="sr-only">Quest 1: </span>Base Camp <small>25 min</small><span class="sr-only" data-node-state></span></span>
+                </a>
+              </li>
+              <li class="node w-lilac" data-quest="q2" style="--x:18.75%;--y:36%">
+                <a href="#step-2">
+                  <span class="node-dot"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-blocks"/></svg><span class="node-num" aria-hidden="true">2</span></span>
+                  <span class="node-label"><span class="sr-only">Quest 2: </span>Build <small>40 min</small><span class="sr-only" data-node-state></span></span>
+                </a>
+              </li>
+              <li class="node w-sky" data-quest="q3" style="--x:41.25%;--y:23%">
+                <a href="#step-3">
+                  <span class="node-dot"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-beacon"/></svg><span class="node-num" aria-hidden="true">3</span></span>
+                  <span class="node-label"><span class="sr-only">Quest 3: </span>Go Live <small>25 min</small><span class="sr-only" data-node-state></span></span>
+                </a>
+              </li>
+              <li class="node w-rose" data-quest="q4" style="--x:54.375%;--y:52%">
+                <a href="#step-4">
+                  <span class="node-dot"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-bug"/></svg><span class="node-num" aria-hidden="true">4</span></span>
+                  <span class="node-label"><span class="sr-only">Quest 4: </span>AI Bug Hunt <small>20 min</small><span class="sr-only" data-node-state></span></span>
+                </a>
+              </li>
+              <li class="node w-mint" data-quest="q5" style="--x:71.875%;--y:73%">
+                <a href="#step-5">
+                  <span class="node-dot"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-door"/></svg><span class="node-num" aria-hidden="true">5</span></span>
+                  <span class="node-label"><span class="sr-only">Quest 5: </span>Access for All <small>20 min</small><span class="sr-only" data-node-state></span></span>
+                </a>
+              </li>
+              <li class="node w-sun" data-quest="finale" style="--x:86.875%;--y:32%">
+                <a href="#finale">
+                  <span class="node-dot"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-trophy"/></svg><span class="node-num" aria-hidden="true">★</span></span>
+                  <span class="node-label"><span class="sr-only">Finale: </span>Showcase and Debrief <small>20 min</small><span class="sr-only" data-node-state></span></span>
+                </a>
+              </li>
+          </ol>
+          <div class="token needs-js" id="token" aria-hidden="true"><img class="bot-bob" src="assets/quest-bot.svg" alt="" width="160" height="180"></div>
+        </div>
+        <p class="atlas-caption">Seven stops, one live website. Choose a stop to read its field note. The trail turns solid behind your team.</p>
+        <div class="guide">
+          <img class="bot bot-bob" src="assets/quest-bot.svg" alt="Quest Bot, a lantern-shaped robot with one large eye, a backpack, boots, a flag antenna, and a rolled map" width="160" height="180">
+          <p class="bubble"><strong>Quest Bot</strong> <span aria-hidden="true"><span id="bot-typed">Hi, I am Quest Bot, your guide. Choose a stop on the map and start walking!</span><span class="caret needs-js"></span></span><span class="sr-only" id="bot-spoken">Hi, I am Quest Bot, your guide. Choose a stop on the map and start walking!</span></p>
+        </div>
+      </section>
+    </div>
+
+    <section class="wrap section" id="quest-path" aria-labelledby="path-title">
+      <p class="kicker"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-flag"/></svg> Field notes</p>
+      <h2 id="path-title">The quest path</h2>
+      <p>Six quests lead to a shared finale. When everyone on your team has finished one, press <strong>Complete</strong> to collect its coins and badge.</p>
+      <ol class="notes">
+          <li class="note w-sun">
+            <article class="note-card panel rise" style="--i:0">
+              <p class="kicker">Before you set off</p>
+              <h3>Pack your bag</h3>
+              <p class="goal">Bring these and you are ready for the trail.</p>
+              <h4>What you need</h4>
+              <ul>
+                <li>A laptop with an up-to-date web browser.</li>
+                <li>A free GitHub account.</li>
+                <li>A free Claude or ChatGPT account.</li>
+                <li>Two or three images that you are allowed to share.</li>
+                <li>One sentence about your research project.</li>
+              </ul>
+              <div class="note-actions">
+                <a class="btn" href="template/"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-rocket"/></svg> See the starter template</a>
+              </div>
+            </article>
+          </li>
+          <li class="note w-coral" id="step-0" data-quest="q0">
+            <article class="note-card panel rise" style="--i:1">
+              <span class="stamp needs-js"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-check"/></svg> Cleared</span>
+              <p class="kicker">Quest 0 <span class="time">20 min</span></p>
+              <h3>Briefing</h3>
+              <p class="goal"><strong>Goal:</strong> Meet your team and see where the quest leads.</p>
+              <h4>What you do</h4>
+              <ul>
+                <li>Tour the quest map and a finished example site.</li>
+                <li>Form small teams and share your research interests.</li>
+                <li>Agree on how to ask for and offer help.</li>
+              </ul>
+              <div class="badge-row" data-badge="q0">
+                <svg class="patch" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><circle class="patch-base" cx="32" cy="32" r="30"/><circle class="patch-stitch" cx="32" cy="32" r="24"/><use href="#i-compass" x="16" y="16" width="32" height="32"/></svg>
+                <p><span class="badge-label">Team badge · <span data-badge-state>Locked</span> · 20 coins</span> <span class="badge-name">Trail Crew</span></p>
+              </div>
+              <div class="note-actions">
+                <button type="button" class="btn btn-primary needs-js" data-complete="q0"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-check"/></svg> <span data-label>Complete</span><span class="sr-only">: Briefing</span></button>
+              </div>
+            </article>
+          </li>
+          <li class="note w-sun" id="step-1" data-quest="q1">
+            <article class="note-card panel rise" style="--i:2">
+              <span class="stamp needs-js"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-check"/></svg> Cleared</span>
+              <p class="kicker">Quest 1 <span class="time">25 min</span></p>
+              <h3>Base Camp</h3>
+              <p class="goal"><strong>Goal:</strong> Get every tool ready before building.</p>
+              <h4>What you do</h4>
+              <ul>
+                <li>Sign in to GitHub and to the free version of Claude or ChatGPT.</li>
+                <li>Copy the starter template into your own repository.</li>
+                <li>Describe your project in one sentence and decide what not to share with an AI tool.</li>
+              </ul>
+              <div class="badge-row" data-badge="q1">
+                <svg class="patch" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><circle class="patch-base" cx="32" cy="32" r="30"/><circle class="patch-stitch" cx="32" cy="32" r="24"/><use href="#i-tent" x="16" y="16" width="32" height="32"/></svg>
+                <p><span class="badge-label">Team badge · <span data-badge-state>Locked</span> · 20 coins</span> <span class="badge-name">Camp Builders</span></p>
+              </div>
+              <div class="note-actions">
+                <button type="button" class="btn btn-primary needs-js" data-complete="q1"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-check"/></svg> <span data-label>Complete</span><span class="sr-only">: Base Camp</span></button>
+                <a class="btn" href="template/"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-rocket"/></svg> Use the starter template</a>
+              </div>
+            </article>
+          </li>
+          <li class="note w-lilac" id="step-2" data-quest="q2">
+            <article class="note-card panel rise" style="--i:3">
+              <span class="stamp needs-js"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-check"/></svg> Cleared</span>
+              <p class="kicker">Quest 2 <span class="time">40 min</span></p>
+              <h3>Build</h3>
+              <p class="goal"><strong>Goal:</strong> Turn your research into a first web page.</p>
+              <h4>What you do</h4>
+              <ul>
+                <li>Ask the AI assistant to help you edit the template.</li>
+                <li>Add a title, a description, images you have the right to use, and a note about yourself.</li>
+                <li>Read every suggested change and check its facts before you keep it.</li>
+              </ul>
+              <div class="badge-row" data-badge="q2">
+                <svg class="patch" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><circle class="patch-base" cx="32" cy="32" r="30"/><circle class="patch-stitch" cx="32" cy="32" r="24"/><use href="#i-blocks" x="16" y="16" width="32" height="32"/></svg>
+                <p><span class="badge-label">Team badge · <span data-badge-state>Locked</span> · 20 coins</span> <span class="badge-name">Story Builders</span></p>
+              </div>
+              <div class="note-actions">
+                <button type="button" class="btn btn-primary needs-js" data-complete="q2"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-check"/></svg> <span data-label>Complete</span><span class="sr-only">: Build</span></button>
+              </div>
+            </article>
+          </li>
+          <li class="note w-sky" id="step-3" data-quest="q3">
+            <article class="note-card panel rise" style="--i:0">
+              <span class="stamp needs-js"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-check"/></svg> Cleared</span>
+              <p class="kicker">Quest 3 <span class="time">25 min</span></p>
+              <h3>Go Live</h3>
+              <p class="goal"><strong>Goal:</strong> Publish your site at a public web address.</p>
+              <h4>What you do</h4>
+              <ul>
+                <li>Upload your files and turn on GitHub Pages.</li>
+                <li>Open your new link on a phone and on a laptop.</li>
+                <li>Troubleshoot with a teammate until every site loads.</li>
+              </ul>
+              <div class="badge-row" data-badge="q3">
+                <svg class="patch" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><circle class="patch-base" cx="32" cy="32" r="30"/><circle class="patch-stitch" cx="32" cy="32" r="24"/><use href="#i-beacon" x="16" y="16" width="32" height="32"/></svg>
+                <p><span class="badge-label">Team badge · <span data-badge-state>Locked</span> · 20 coins</span> <span class="badge-name">Beacon Lighters</span></p>
+              </div>
+              <div class="note-actions">
+                <button type="button" class="btn btn-primary needs-js" data-complete="q3"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-check"/></svg> <span data-label>Complete</span><span class="sr-only">: Go Live</span></button>
+              </div>
+            </article>
+          </li>
+          <li class="note w-rose" id="step-4" data-quest="q4">
+            <article class="note-card panel rise" style="--i:1">
+              <span class="stamp needs-js"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-check"/></svg> Cleared</span>
+              <p class="kicker">Quest 4 <span class="time">20 min</span></p>
+              <h3>AI Bug Hunt</h3>
+              <p class="goal"><strong>Goal:</strong> Learn to question what AI produces.</p>
+              <h4>What you do</h4>
+              <ul>
+                <li>Zap six planted errors on the practice page.</li>
+                <li>Compare findings and explain how you caught each one.</li>
+                <li>Run the same checks on your own site.</li>
+              </ul>
+              <div class="badge-row" data-badge="q4">
+                <svg class="patch" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><circle class="patch-base" cx="32" cy="32" r="30"/><circle class="patch-stitch" cx="32" cy="32" r="24"/><use href="#i-bug" x="16" y="16" width="32" height="32"/></svg>
+                <p><span class="badge-label">Team badge · <span data-badge-state>Locked</span> · 20 coins</span> <span class="badge-name">Bug Spotters</span></p>
+              </div>
+              <div class="note-actions">
+                <button type="button" class="btn btn-primary needs-js" data-complete="q4"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-check"/></svg> <span data-label>Complete</span><span class="sr-only">: AI Bug Hunt</span></button>
+                <a class="btn" href="bug-hunt/"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-bug"/></svg> Play the Bug Hunt</a>
+              </div>
+            </article>
+          </li>
+          <li class="note w-mint" id="step-5" data-quest="q5">
+            <article class="note-card panel rise" style="--i:2">
+              <span class="stamp needs-js"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-check"/></svg> Cleared</span>
+              <p class="kicker">Quest 5 <span class="time">20 min</span></p>
+              <h3>Access for All</h3>
+              <p class="goal"><strong>Goal:</strong> Make your site usable by more people.</p>
+              <h4>What you do</h4>
+              <ul>
+                <li>Move through a site using only the keyboard.</li>
+                <li>Check alt text, heading order, and color contrast.</li>
+                <li>Swap sites with a teammate and fix at least one barrier.</li>
+              </ul>
+              <div class="badge-row" data-badge="q5">
+                <svg class="patch" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><circle class="patch-base" cx="32" cy="32" r="30"/><circle class="patch-stitch" cx="32" cy="32" r="24"/><use href="#i-door" x="16" y="16" width="32" height="32"/></svg>
+                <p><span class="badge-label">Team badge · <span data-badge-state>Locked</span> · 20 coins</span> <span class="badge-name">Open Door</span></p>
+              </div>
+              <div class="note-actions">
+                <button type="button" class="btn btn-primary needs-js" data-complete="q5"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-check"/></svg> <span data-label>Complete</span><span class="sr-only">: Access for All</span></button>
+              </div>
+            </article>
+          </li>
+          <li class="note w-sun" id="finale" data-quest="finale">
+            <article class="note-card panel rise" style="--i:3">
+              <span class="stamp needs-js"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-check"/></svg> Cleared</span>
+              <p class="kicker">Finale <span class="time">20 min</span></p>
+              <h3>Showcase and Debrief</h3>
+              <p class="goal"><strong>Goal:</strong> Celebrate the work and reflect on how it was made.</p>
+              <h4>What you do</h4>
+              <ul>
+                <li>Each team shows a live site and one thing it learned.</li>
+                <li>Discuss where AI helped, where it misled, and how you could tell.</li>
+                <li>Lay out your six badges and choose a next step for each project.</li>
+              </ul>
+              <div class="badge-row">
+                <svg class="ic big" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-trophy"/></svg>
+                <p><span class="badge-label">30 coins</span> <span>No new badge here: the finale celebrates the six that your team collected together.</span></p>
+              </div>
+              <div class="note-actions">
+                <button type="button" class="btn btn-primary needs-js" data-complete="finale"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-check"/></svg> <span data-label>Complete</span><span class="sr-only">: Showcase and Debrief</span></button>
+              </div>
+            </article>
+          </li>
+      </ol>
+    </section>
+
+    <section class="wrap section" aria-labelledby="how-title">
+      <p class="kicker"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-scroll"/></svg> Trail rules</p>
+      <h2 id="how-title">How the quest works</h2>
+      <ul class="how-grid">
+        <li class="panel w-coral rise" style="--i:0">
+          <svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-badge"/></svg>
+          <h3>Earn badges together</h3>
+          <p>A badge belongs to the whole team and is earned when every member finishes the quest. Helping a teammate is part of winning.</p>
+        </li>
+        <li class="panel w-lilac rise" style="--i:1">
+          <svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-shield"/></svg>
+          <h3>Question the AI</h3>
+          <p>AI assistants draft and explain. Participants stay in charge: they read every change, check facts, and verify sources.</p>
+        </li>
+        <li class="panel w-mint rise" style="--i:2">
+          <svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-globe"/></svg>
+          <h3>Publish for everyone</h3>
+          <p>Each project goes live on the web and then gets an accessibility pass, so more people can read and use it.</p>
+        </li>
+      </ul>
+    </section>
+
+    <section class="wrap section" id="badges" aria-labelledby="badges-title">
+      <p class="kicker"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-star"/></svg> Patch board</p>
+      <h2 id="badges-title">Team badges</h2>
+      <p>Six patches for six quests, and one that hides from anyone who forgot the classics.</p>
+      <ul class="shelf">
+          <li class="panel w-coral" data-badge="q0">
+            <svg class="patch" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><circle class="patch-base" cx="32" cy="32" r="30"/><circle class="patch-stitch" cx="32" cy="32" r="24"/><use href="#i-compass" x="16" y="16" width="32" height="32"/></svg>
+            <span class="badge-name">Trail Crew</span>
+            <span class="badge-state" data-badge-state>Locked</span>
+          </li>
+          <li class="panel w-sun" data-badge="q1">
+            <svg class="patch" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><circle class="patch-base" cx="32" cy="32" r="30"/><circle class="patch-stitch" cx="32" cy="32" r="24"/><use href="#i-tent" x="16" y="16" width="32" height="32"/></svg>
+            <span class="badge-name">Camp Builders</span>
+            <span class="badge-state" data-badge-state>Locked</span>
+          </li>
+          <li class="panel w-lilac" data-badge="q2">
+            <svg class="patch" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><circle class="patch-base" cx="32" cy="32" r="30"/><circle class="patch-stitch" cx="32" cy="32" r="24"/><use href="#i-blocks" x="16" y="16" width="32" height="32"/></svg>
+            <span class="badge-name">Story Builders</span>
+            <span class="badge-state" data-badge-state>Locked</span>
+          </li>
+          <li class="panel w-sky" data-badge="q3">
+            <svg class="patch" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><circle class="patch-base" cx="32" cy="32" r="30"/><circle class="patch-stitch" cx="32" cy="32" r="24"/><use href="#i-beacon" x="16" y="16" width="32" height="32"/></svg>
+            <span class="badge-name">Beacon Lighters</span>
+            <span class="badge-state" data-badge-state>Locked</span>
+          </li>
+          <li class="panel w-rose" data-badge="q4">
+            <svg class="patch" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><circle class="patch-base" cx="32" cy="32" r="30"/><circle class="patch-stitch" cx="32" cy="32" r="24"/><use href="#i-bug" x="16" y="16" width="32" height="32"/></svg>
+            <span class="badge-name">Bug Spotters</span>
+            <span class="badge-state" data-badge-state>Locked</span>
+          </li>
+          <li class="panel w-mint" data-badge="q5">
+            <svg class="patch" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><circle class="patch-base" cx="32" cy="32" r="30"/><circle class="patch-stitch" cx="32" cy="32" r="24"/><use href="#i-door" x="16" y="16" width="32" height="32"/></svg>
+            <span class="badge-name">Open Door</span>
+            <span class="badge-state" data-badge-state>Locked</span>
+          </li>
+          <li class="panel w-sun" data-badge="secret">
+            <svg class="patch" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><circle class="patch-base" cx="32" cy="32" r="30"/><circle class="patch-stitch" cx="32" cy="32" r="24"/><use href="#i-key" x="16" y="16" width="32" height="32"/></svg>
+            <span class="badge-name" data-secret-name>Secret badge</span>
+            <span class="badge-state" data-badge-state>Locked</span>
+          </li>
+      </ul>
+    </section>
+
+    <section class="wrap section" aria-labelledby="thanks-title">
+      <div class="panel thanks rise">
+        <div>
+          <p class="kicker" id="run-kicker">Your expedition so far</p>
+          <h2 id="thanks-title" tabindex="-1">Thanks for playing</h2>
+          <p id="run-message">Progress is saved in this browser.</p>
+          <div class="actions needs-js">
+            <button type="button" class="btn btn-primary" id="continue-button">Continue <svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></button>
+            <button type="button" class="btn" data-reset>Reset progress</button>
+          </div>
+        </div>
+        <dl class="stats needs-js">
+          <div><dt>Level</dt><dd data-stat="level">1</dd></div>
+          <div><dt>Coins</dt><dd data-stat="coins">0</dd></div>
+          <div><dt>Quests</dt><dd data-stat="quests">0/7</dd></div>
+          <div><dt>Badges</dt><dd data-stat="badges">0/6</dd></div>
+        </dl>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>Workshop by Sepehr Vaez Afshar, University of Illinois Urbana-Champaign</p>
+      <p><a href="https://sepafshar.com/">sepafshar.com</a></p>
+    </div>
+  </footer>
+
+  <dialog id="settings" class="settings" aria-labelledby="settings-title">
+    <h2 id="settings-title">Accessibility and settings</h2>
+    <label class="switch"><input type="checkbox" data-pref="reduce"> <span>Reduce motion<small id="reduce-note">Stops drifting shapes, bobbing, marching trails, confetti, and the loading animation.</small></span></label>
+    <label class="switch"><input type="checkbox" data-pref="large"> <span>Larger text<small>Makes all text a size bigger.</small></span></label>
+    <label class="switch"><input type="checkbox" data-pref="calm"> <span>Calm background<small>Hides the contour lines and drifting shapes.</small></span></label>
+    <label class="switch"><input type="checkbox" data-pref="sound"> <span>Sound effects<small>Short beeps for coins and badges. Off by default.</small></span></label>
+    <div class="actions">
+      <form method="dialog"><button class="btn btn-primary">Done</button></form>
+      <button type="button" class="btn" data-reset>Reset progress</button>
+    </div>
+    <p id="settings-note" role="status"></p>
+  </dialog>
+
+  <div class="sr-only" id="announcer" role="status"></div>
+  <div class="toast-area" id="toast-area" aria-hidden="true"></div>
+</body>
+</html>
